@@ -102,18 +102,25 @@ app.post('/login', async (req, res) => {
 // });
 
 app.get('/', (req, res) => {
-    console.log("Authorization header:", req.headers['authorization']); // log incoming token
-    const token = req.headers['authorization'];
+    console.log("Incoming headers:", req.headers); // debug
+
+    let token = req.headers['authorization'];
     if (!token) return res.status(401).json({ error: "Access denied" });
+
+    // Remove "Bearer " if present
+    if (token.startsWith("Bearer ")) {
+        token = token.slice(7).trim();
+    }
 
     try {
         const verified = jwt.verify(token, process.env.JWT_SECRET);
         res.json({ message: "Welcome!", userId: verified.id });
     } catch (err) {
-        console.log(err); // log JWT verification errors
+        console.log("JWT verification error:", err);
         res.status(400).json({ error: 'Invalid token' });
     }
 });
+
 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
