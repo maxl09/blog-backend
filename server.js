@@ -8,16 +8,16 @@ const jwt = require('jsonwebtoken');
 const app = express()
 app.use(express.json());
 app.use(cors({
-    origin:
-        "https://ply-instagram-clone.vercel.app" || "http://localhost:5173",
+    origin: ["https://ply-instagram-clone.vercel.app", "http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
 }));
 
-mongoose.connect("mongodb://127.0.0.1:27017/blog-page" || process.env.MONGO_URI);
 
-const PORT = 5002 || process.env.PORT;
+const PORT = process.env.PORT || 5002;
+mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/blog-page")
+
 
 const UserSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
@@ -64,7 +64,7 @@ app.post('/login', async (req, res) => {
         return res.status(400).json({ error: 'Invalid credentials' })
     }
 
-    const token = jwt.sign({ id: user._id }, "secretKey" || process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.json({ token })
 })
 
