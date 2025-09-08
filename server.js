@@ -84,19 +84,33 @@ app.post('/login', async (req, res) => {
 //     }
 // })
 
-app.get('/', (req, res) => {
-    let token = req.headers['authorization'];
-    if (!token) return res.status(401).json({ error: "Access denied" });
+// app.get('/', (req, res) => {
+//     let token = req.headers['authorization'];
+//     if (!token) return res.status(401).json({ error: "Access denied" });
 
-    // If client sends "Bearer <token>", remove the "Bearer " part
-    if (token.startsWith("Bearer ")) {
-        token = token.slice(7, token.length).trim();
-    }
+//     // If client sends "Bearer <token>", remove the "Bearer " part
+//     if (token.startsWith("Bearer ")) {
+//         token = token.slice(7, token.length).trim();
+//     }
+
+//     try {
+//         const verified = jwt.verify(token, process.env.JWT_SECRET);
+//         res.json({ message: "Welcome!", userId: verified.id });
+//     } catch (err) {
+//         res.status(400).json({ error: 'Invalid token' });
+//     }
+// });
+
+app.get('/', (req, res) => {
+    console.log("Authorization header:", req.headers['authorization']); // log incoming token
+    const token = req.headers['authorization'];
+    if (!token) return res.status(401).json({ error: "Access denied" });
 
     try {
         const verified = jwt.verify(token, process.env.JWT_SECRET);
         res.json({ message: "Welcome!", userId: verified.id });
     } catch (err) {
+        console.log(err); // log JWT verification errors
         res.status(400).json({ error: 'Invalid token' });
     }
 });
