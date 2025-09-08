@@ -50,7 +50,7 @@ app.post('/signup', async (req, res) => {
 
         res.json({ message: 'User created successfully' })
     } catch (err) {
-        res.status(400).json({ error: "User already exists" })
+        res.status(400).json({ error: err })
     }
 })
 
