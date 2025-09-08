@@ -69,19 +69,37 @@ app.post('/login', async (req, res) => {
 })
 
 // Protected route
-app.post('/', (req, res) => {
-    const token = req.headers['authorization'];
+// app.post('/', (req, res) => {
+//     const token = req.headers['authorization'];
 
-    if (!token) {
-        return res.status(401).json({ error: "Access denied" })
+//     if (!token) {
+//         return res.status(401).json({ error: "Access denied" })
+//     }
+
+//     try {
+//         const verified = jwt.verify(token, "secretKey");
+//         res.json({ message: "Welcome!", userId: verified.id })
+//     } catch (err) {
+//         res.status(400).json({ error: 'Invalid token' })
+//     }
+// })
+
+app.get('/', (req, res) => {
+    let token = req.headers['authorization'];
+    if (!token) return res.status(401).json({ error: "Access denied" });
+
+    // If client sends "Bearer <token>", remove the "Bearer " part
+    if (token.startsWith("Bearer ")) {
+        token = token.slice(7, token.length).trim();
     }
 
     try {
-        const verified = jwt.verify(token, "secretKey");
-        res.json({ message: "Welcome!", userId: verified.id })
+        const verified = jwt.verify(token, process.env.JWT_SECRET);
+        res.json({ message: "Welcome!", userId: verified.id });
     } catch (err) {
-        res.status(400).json({ error: 'Invalid token' })
+        res.status(400).json({ error: 'Invalid token' });
     }
-})
+});
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
