@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 const app = express()
 app.use(express.json());
 app.use(cors({
-    origin: ["https://ply-instagram-clone.vercel.app", "http://localhost:5173"],
+    origin: ["https://ply-instagram-clone.vercel.app/", "http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
