@@ -1,9 +1,10 @@
+
 const express = require('express')
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
-// const nodemailer = require("nodemailer");
+// require("dotenv").config();
 
 const app = express()
 app.use(express.json());
@@ -17,114 +18,73 @@ app.use(cors({
     credentials: true
 }));
 
-
 const PORT = process.env.PORT || 5002;
-mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/blog-page")
+const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/blog-page";
+mongoose.connect(MONGO_URI)
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error("MongoDB connection error:", err));
 
+// const UserSchema = new mongoose.Schema({
+//     name: { type: String, required: true },
+//     username: { type: String, required: true, unique: true },
+//     password: { type: String, required: true }
+// });
 
-const UserSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true }
-});
+// const User = mongoose.model("User", UserSchema);
 
-const User = mongoose.model("User", UserSchema);
+// Sign up
+// app.post('/signup', async (req, res) => {
+//     try {
+//         const { name, username, password } = req.body;
 
-// Email transporter
-// const transporter = nodemailer.createTransport({
-//     service: 'gmail',
-//     auth: {
-//         user: 'noreply.ply.auth@gmail.com',
-//         pass: 'pxzg opui oien isip'
+//         const hashedPassword = await bcrypt.hash(password, 10);
+//         const newUser = new User({ name, username, password: hashedPassword });
+//         await newUser.save();
+
+//         res.json({ message: 'User created successfully' })
+//     } catch (err) {
+//         res.status(400).json({ error: "User already exists" })
 //     }
 // })
 
-// Sign up
-app.post('/signup', async (req, res) => {
-    try {
-        const { name, username, password } = req.body;
+// // Login
+// app.post('/login', async (req, res) => {
+//     const { username, password } = req.body;
+//     const user = await User.findOne({ username });
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ name, username, password: hashedPassword });
-        await newUser.save();
-
-        res.json({ message: 'User created successfully' })
-    } catch (err) {
-        res.status(400).json({ error: err.message })
-    }
-})
-
-// Login
-app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
-
-    if (!user) {
-        return res.status(400).json({ error: 'User not found' })
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-        return res.status(400).json({ error: 'Invalid credentials' })
-    }
-
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token })
-})
-
-// Protected route
-// app.post('/', (req, res) => {
-//     const token = req.headers['authorization'];
-
-//     if (!token) {
-//         return res.status(401).json({ error: "Access denied" })
+//     if (!user) {
+//         return res.status(400).json({ error: 'User not found' })
 //     }
 
-//     try {
-//         const verified = jwt.verify(token, "secretKey");
-//         res.json({ message: "Welcome!", userId: verified.id })
-//     } catch (err) {
-//         res.status(400).json({ error: 'Invalid token' })
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch) {
+//         return res.status(400).json({ error: 'Invalid credentials' })
 //     }
+
+//     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+//     res.json({ token })
 // })
 
 // app.get('/', (req, res) => {
+//     console.log("Incoming headers:", req.headers); // debug
+
 //     let token = req.headers['authorization'];
 //     if (!token) return res.status(401).json({ error: "Access denied" });
 
-//     // If client sends "Bearer <token>", remove the "Bearer " part
+//     // Remove "Bearer " if present
 //     if (token.startsWith("Bearer ")) {
-//         token = token.slice(7, token.length).trim();
+//         token = token.slice(7).trim();
 //     }
 
 //     try {
 //         const verified = jwt.verify(token, process.env.JWT_SECRET);
 //         res.json({ message: "Welcome!", userId: verified.id });
 //     } catch (err) {
+//         console.log("JWT verification error:", err);
 //         res.status(400).json({ error: 'Invalid token' });
 //     }
 // });
 
-app.get('/', (req, res) => {
-    console.log("Incoming headers:", req.headers); // debug
-
-    let token = req.headers['authorization'];
-    if (!token) return res.status(401).json({ error: "Access denied" });
-
-    // Remove "Bearer " if present
-    if (token.startsWith("Bearer ")) {
-        token = token.slice(7).trim();
-    }
-
-    try {
-        const verified = jwt.verify(token, process.env.JWT_SECRET);
-        res.json({ message: "Welcome!", userId: verified.id });
-    } catch (err) {
-        console.log("JWT verification error:", err);
-        res.status(400).json({ error: 'Invalid token' });
-    }
-});
-
-
+app.use('/posts', require('./src/routes'));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

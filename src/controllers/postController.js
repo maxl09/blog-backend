@@ -1,0 +1,71 @@
+const mongoose = require('mongoose')
+
+const Post = require('../models/Post')
+const User = require('../models/User')
+
+exports.getPosts = async (req, res) => {
+    try {
+        const posts = await Post.find()
+            .populate('author', 'username profilePic')
+            .populate({ path: 'comment', populate: { path: 'author', select: 'username profilePic' } })
+            .sort({ createdAt: -1 })
+
+        res.json(posts);
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
+exports.createPost = async (req, res) => {
+    try {
+        const { caption, image } = req.body;
+        const userId = req.user.id;
+
+        const post = await Post.create({ caption, image, author: userId });
+
+        //push post into user's posts array
+        await User.findByIdAndUpdate(userId, { $push: { posts: post._id } })
+
+        res.status(201).json(post);
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
+exports.LikePost = async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const userId = req.user.id;
+
+        const post = await Post.findById(postId)
+        if (!post.likes.includes(userId)) {
+            post.likes.push(userId);
+        } else {
+            post.likes.pull(userId);
+        }
+        await post.save();
+
+        res.json(post);
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
+exports.savePost = async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const userId = req.user.id;
+
+        const user = await User.findById(userId);
+        if (!user.saved.includes(postId)) {
+            post.saved.push(postId);
+        } else {
+            post.saved.pull(postId);
+        }
+        await user.save();
+        res.json(user.saved);
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+
+}
