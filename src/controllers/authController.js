@@ -10,7 +10,8 @@ exports.signup = async (req, res) => {
         const user = await User.create({ name, username, password: hashedPassword, isAdmin });
         res.json({ message: 'User created successfully!' })
     } catch (error) {
-        res.status(400).json({ error: 'User already exists' })
+
+        res.status(400).json({ error: 'User already exists ', error: error.message })
     }
 }
 
@@ -19,7 +20,7 @@ exports.login = async (req, res) => {
         const { username, password } = req.body;
 
         const user = await User.findOne({ username })
-        if (!user) return res.status(404).json({ error: 'User not found' });
+        if (!user) return res.status(404).json({ error: 'User not found ', error: error.message });
 
         const valid = await bcrypt.compare(password, user.password);
         if (!valid) return res.status(401).json({ error: 'Invalid Password' })
