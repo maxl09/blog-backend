@@ -11,7 +11,7 @@ exports.signup = async (req, res) => {
         res.json({ message: 'User created successfully!' })
     } catch (error) {
 
-        res.status(400).json({ error: 'User already exists ', error: error.message })
+        res.status(400).json({ error: 'User already exists ' })
     }
 }
 
@@ -20,7 +20,7 @@ exports.login = async (req, res) => {
         const { username, password } = req.body;
 
         const user = await User.findOne({ username })
-        if (!user) return res.status(404).json({ error: 'User not found ', error: error.message });
+        if (!user) return res.status(404).json({ error: 'User not found ' });
 
         const valid = await bcrypt.compare(password, user.password);
         if (!valid) return res.status(401).json({ error: 'Invalid Password' })
