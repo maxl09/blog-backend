@@ -6,6 +6,9 @@ module.exports = (req, res, next) => {
     if (!token) return res.status(401).json({ error: "No token provided" });
 
     try {
+        console.log("Verifying token with secret:", process.env.JWT_SECRET);
+        console.log("Token received:", token);
+
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;
         next();

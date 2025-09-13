@@ -6,6 +6,7 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: true },
     profilePic: { type: String, default: '' },
     bio: { type: String, default: '' },
+    isAdmin: { type: Boolean, default: false },
 
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Posts' }], //user posts
     saved: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Saved' }], //saved posts

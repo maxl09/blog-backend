@@ -14,8 +14,12 @@ const auth = require('../middleware/auth')
 const authController = require('../controllers/authController')
 const commentController = require('../controllers/commentController')
 const postController = require('../controllers/postController')
+const adminController = require('../controllers/adminController')
 
 const router = express.Router();
+
+// admin
+router.get('/users', auth, adminController.users)
 
 // auth
 router.post('/signup', authController.signup);

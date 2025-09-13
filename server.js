@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
-// require("dotenv").config();
+require("dotenv").config();
 
 const app = express()
 app.use(express.json());
@@ -20,8 +20,10 @@ app.use(cors({
 
 const PORT = process.env.PORT || 5002;
 const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/blog-page";
+// const MONGO_URI = "mongodb://127.0.0.1:27017/blog-page";
+
 mongoose.connect(MONGO_URI)
-    .then(() => console.log('MongoDB connected'))
+    .then(() => console.log('MongoDB connected to', mongoose.connection.name))
     .catch(err => console.error("MongoDB connection error:", err));
 
 // const UserSchema = new mongoose.Schema({
@@ -85,6 +87,6 @@ mongoose.connect(MONGO_URI)
 //     }
 // });
 
-app.use('/posts', require('./src/routes'));
+app.use('/', require('./src/routes'));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

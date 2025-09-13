@@ -7,7 +7,8 @@ exports.getPosts = async (req, res) => {
     try {
         const posts = await Post.find()
             .populate('author', 'username profilePic')
-            .populate({ path: 'comment', populate: { path: 'author', select: 'username profilePic' } })
+            .populate({ path: 'comment', strictPopulate: false, populate: { path: 'author', select: 'username profilePic' } })
+            .populate({ path: 'createdAt' })
             .sort({ createdAt: -1 })
 
         res.json(posts);
@@ -58,9 +59,9 @@ exports.savePost = async (req, res) => {
 
         const user = await User.findById(userId);
         if (!user.saved.includes(postId)) {
-            post.saved.push(postId);
+            user.saved.push(postId);
         } else {
-            post.saved.pull(postId);
+            user.saved.pull(postId);
         }
         await user.save();
         res.json(user.saved);
