@@ -7,7 +7,7 @@ exports.signup = async (req, res) => {
         const { name, username, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const user = await User.create({ name, username, password: hashedPassword });
+        const user = await User.create({ name, username, password: hashedPassword, isAdmin });
         res.json({ message: 'User created successfully!' })
     } catch (error) {
         res.status(400).json({ error: 'User already exists' })
