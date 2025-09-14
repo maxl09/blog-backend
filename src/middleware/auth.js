@@ -1,7 +1,8 @@
 // middleware/auth.js
 const jwt = require("jsonwebtoken");
+const User = require('../models/User')
 
-module.exports = (req, res, next) => {
+const auth = (req, res, next) => {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) return res.status(401).json({ error: "No token provided" });
 
@@ -16,3 +17,12 @@ module.exports = (req, res, next) => {
         res.status(401).json({ error: "Invalid token" });
     }
 };
+
+const admin = (req, res, next) => {
+    if (!req.user || !req.user.isAdmin) {
+        return res.status(403).json({ error: 'Admin access only' })
+    }
+    next();
+}
+
+module.exports = { auth, admin };

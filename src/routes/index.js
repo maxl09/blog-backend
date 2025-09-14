@@ -10,7 +10,7 @@
 // module.exports = router;
 
 const express = require('express')
-const auth = require('../middleware/auth')
+const { auth, admin } = require('../middleware/auth')
 const authController = require('../controllers/authController')
 const commentController = require('../controllers/commentController')
 const postController = require('../controllers/postController')
