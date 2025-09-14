@@ -12,6 +12,7 @@
 const express = require('express')
 const { auth, admin } = require('../middleware/auth')
 const authController = require('../controllers/authController')
+const userController = require('../controllers/userController')
 const commentController = require('../controllers/commentController')
 const postController = require('../controllers/postController')
 const adminController = require('../controllers/adminController')
@@ -24,6 +25,9 @@ router.get('/users', auth, admin, adminController.users)
 // auth
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
+
+// user profile
+router.get('/user/:id', auth, userController.getUser);
 
 // posts
 router.get('/posts', auth, postController.getPosts);
