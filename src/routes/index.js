@@ -27,7 +27,7 @@ router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 
 // user profile
-router.get('/user/:id', auth, userController.getUser);
+router.get('/user/:userId', auth, userController.getUser);
 
 // posts
 router.get('/posts', auth, postController.getPosts);
