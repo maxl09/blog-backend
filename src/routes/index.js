@@ -19,7 +19,7 @@ const adminController = require('../controllers/adminController')
 const router = express.Router();
 
 // admin
-router.get('/users', auth, adminController.users)
+router.get('/users', auth, admin, adminController.users)
 
 // auth
 router.post('/signup', authController.signup);
