@@ -20,9 +20,6 @@ const { upload } = require('../middleware/upload')
 
 const router = express.Router();
 
-// serve uploaded images
-router.use('/uploads', express.static('uploads'));
-
 // admin
 router.get('/users', auth, admin, adminController.users)
 

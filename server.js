@@ -90,6 +90,9 @@ mongoose.connect(MONGO_URI, {
 //     }
 // });
 
+// serve uploaded images
+app.use('/uploads', express.static('uploads'));
+
 app.use('/', require('./src/routes'));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
