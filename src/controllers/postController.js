@@ -20,12 +20,14 @@ exports.getPosts = async (req, res) => {
 
 exports.createPost = async (req, res) => {
     try {
-        console.log("req.file:", req.file);
-        console.log("req.body:", req.body);
+        // console.log("req.file:", req.file);
+        // console.log("req.body:", req.body);
+        console.log('req.file:', req.file);
         const { caption } = req.body;
         const userId = req.user.id;
 
-        const imageUrl = req.file ? `/uploads/${req.file.filename}` : null
+        // const imageUrl = req.file ? `/uploads/${req.file.filename}` : null
+        const imageUrl = req.file ? req.file.path : null; // Cloudinary URL
 
         const post = await Post.create({
             caption,
@@ -38,7 +40,7 @@ exports.createPost = async (req, res) => {
 
         res.status(201).json(post);
     } catch (error) {
-        console.log('createPost error: ', error)
+        console.log('createPost controller error: ', error)
         res.status(500).json({ error: error.message })
     }
 }

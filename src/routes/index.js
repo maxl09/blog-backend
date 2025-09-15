@@ -16,7 +16,7 @@ const userController = require('../controllers/userController')
 const commentController = require('../controllers/commentController')
 const postController = require('../controllers/postController')
 const adminController = require('../controllers/adminController')
-const { upload } = require('../middleware/upload')
+const upload = require('../middleware/upload')
 
 const router = express.Router();
 
