@@ -4,15 +4,6 @@ const multer = require('multer')
 const Post = require('../models/Post')
 const User = require('../models/User')
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'uploads/'),
-    filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
-});
-
-const upload = multer({ storage })
-
-exports.upload = upload
-
 exports.getPosts = async (req, res) => {
     try {
         const posts = await Post.find()
@@ -32,7 +23,7 @@ exports.createPost = async (req, res) => {
         const { caption } = req.body;
         const userId = req.user.id;
 
-        const imageUrl = req.file ? `/uploads/${req.file.name}` : null
+        const imageUrl = req.file ? `/uploads/${req.file.filename}` : null
 
         const post = await Post.create({
             caption,

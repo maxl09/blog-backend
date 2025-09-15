@@ -16,6 +16,7 @@ const userController = require('../controllers/userController')
 const commentController = require('../controllers/commentController')
 const postController = require('../controllers/postController')
 const adminController = require('../controllers/adminController')
+const { upload } = require('../middleware/upload')
 
 const router = express.Router();
 
@@ -34,7 +35,7 @@ router.get('/user/:userId', auth, userController.getUser);
 
 // posts
 router.get('/posts', auth, postController.getPosts);
-router.post('/posts/create', auth, postController.upload.single('image'), postController.createPost);
+router.post('/posts/create', auth, upload.single('image'), postController.createPost);
 router.put('/posts/:postId/like', auth, postController.LikePost)
 router.put('/posts/:postId/save', auth, postController.savePost)
 
