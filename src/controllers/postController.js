@@ -20,6 +20,8 @@ exports.getPosts = async (req, res) => {
 
 exports.createPost = async (req, res) => {
     try {
+        console.log("req.file:", req.file);
+        console.log("req.body:", req.body);
         const { caption } = req.body;
         const userId = req.user.id;
 
