@@ -1,7 +1,17 @@
 const mongoose = require('mongoose')
+const multer = require('multer')
 
 const Post = require('../models/Post')
 const User = require('../models/User')
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, 'uploads/'),
+    filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
+});
+
+const upload = multer({ storage })
+
+exports.upload = upload
 
 exports.getPosts = async (req, res) => {
     try {
@@ -19,10 +29,16 @@ exports.getPosts = async (req, res) => {
 
 exports.createPost = async (req, res) => {
     try {
-        const { caption, image } = req.body;
+        const { caption } = req.body;
         const userId = req.user.id;
 
-        const post = await Post.create({ caption, image, author: userId });
+        const imageUrl = req.file ? `/uploads/${req.file.name}` : null
+
+        const post = await Post.create({
+            caption,
+            image: imageUrl,
+            author: userId
+        });
 
         //push post into user's posts array
         await User.findByIdAndUpdate(userId, { $push: { posts: post._id } })

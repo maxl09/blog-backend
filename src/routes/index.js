@@ -19,6 +19,9 @@ const adminController = require('../controllers/adminController')
 
 const router = express.Router();
 
+// serve uploaded images
+router.use('/uploads', express.static('uploads'));
+
 // admin
 router.get('/users', auth, admin, adminController.users)
 
@@ -31,7 +34,7 @@ router.get('/user/:userId', auth, userController.getUser);
 
 // posts
 router.get('/posts', auth, postController.getPosts);
-router.post('/posts/create', auth, postController.createPost);
+router.post('/posts/create', auth, postController.upload.single('image'), postController.createPost);
 router.put('/posts/:postId/like', auth, postController.LikePost)
 router.put('/posts/:postId/save', auth, postController.savePost)
 
