@@ -10,6 +10,8 @@ const UserSchema = new mongoose.Schema({
 
     posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Posts' }], //user posts
     saved: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Saved' }], //saved posts
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Following' }],
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Followers' }]
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', UserSchema);

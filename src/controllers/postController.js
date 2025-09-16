@@ -45,6 +45,23 @@ exports.createPost = async (req, res) => {
     }
 }
 
+exports.deletePost = async (req, res) => {
+    try {
+        const { postId } = req.body;
+
+        if (!postId) {
+            return res.status(400).json({ error: 'Post ID is required' })
+        }
+        const deletedPost = await Post.findByIdAndDelete(postId);
+        if (!deletedPost) {
+            return res.status(400).json({ error: 'Post not found' })
+        }
+        res.status(200).json({ message: 'Post deleted successfully' })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
 exports.LikePost = async (req, res) => {
     try {
         const { postId } = req.params;
@@ -80,5 +97,4 @@ exports.savePost = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
-
 }
