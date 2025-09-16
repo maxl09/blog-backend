@@ -56,8 +56,13 @@ exports.deletePost = async (req, res) => {
         if (!post) {
             return res.status(400).json({ error: 'Post not found' })
         }
+
+        //Check permissions
         if (req.user.isAdmin || post.author.toString() === req.user.id) {
+            // Delete post
             await Post.findByIdAndDelete(postId);
+            // Remove post reference from user's posts array
+            await User.findByIdAndUpdate(post.author, { $pull: { posts: postId } });
             res.status(200).json({ message: 'Post deleted successfully' })
         } else {
             res.status(403).json({ error: 'Not authorized to delete this post' })
