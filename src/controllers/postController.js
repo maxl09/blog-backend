@@ -52,11 +52,16 @@ exports.deletePost = async (req, res) => {
         if (!postId) {
             return res.status(400).json({ error: 'Post ID is required' })
         }
-        const deletedPost = await Post.findByIdAndDelete(postId);
-        if (!deletedPost) {
+        const post = await Post.findById(postId);
+        if (!post) {
             return res.status(400).json({ error: 'Post not found' })
         }
-        res.status(200).json({ message: 'Post deleted successfully' })
+        if (req.user.isAdmin || post.author.toString() === req.user.id) {
+            await Post.findByIdAndDelete(postId);
+            res.status(200).json({ message: 'Post deleted successfully' })
+        } else {
+            res.status(403).json({ error: 'Not authorized to delete this post' })
+        }
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
