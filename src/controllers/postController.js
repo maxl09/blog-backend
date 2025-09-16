@@ -74,7 +74,8 @@ exports.deletePost = async (req, res) => {
 
 exports.LikePost = async (req, res) => {
     try {
-        const { postId } = req.params;
+        // const { postId } = req.params;
+        const { postId } = req.body;
         const userId = req.user.id;
 
         const post = await Post.findById(postId)
@@ -93,7 +94,8 @@ exports.LikePost = async (req, res) => {
 
 exports.savePost = async (req, res) => {
     try {
-        const { postId } = req.params;
+        // const { postId } = req.params;
+        const { postId } = req.body;
         const userId = req.user.id;
 
         const user = await User.findById(userId);
