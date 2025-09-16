@@ -33,6 +33,7 @@ router.get('/user/:userId', auth, userController.getUser);
 // posts
 router.get('/posts', auth, postController.getPosts);
 router.post('/posts/create', auth, upload.single('image'), postController.createPost);
+router.delete('/posts/delete', auth, postController.deletePost);
 router.put('/posts/:postId/like', auth, postController.LikePost)
 router.put('/posts/:postId/save', auth, postController.savePost)
 
