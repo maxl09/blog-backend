@@ -72,7 +72,7 @@ exports.deletePost = async (req, res) => {
     }
 }
 
-exports.LikePost = async (req, res) => {
+exports.likePost = async (req, res) => {
     try {
         // const { postId } = req.params;
         const { postId } = req.body;

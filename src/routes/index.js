@@ -21,7 +21,7 @@ const upload = require('../middleware/upload')
 const router = express.Router();
 
 // admin
-router.get('/users', auth, admin, adminController.users)
+router.get('/users', auth, adminController.users)
 
 // auth
 router.post('/signup', authController.signup);
@@ -34,7 +34,7 @@ router.get('/user/:userId', auth, userController.getUser);
 router.get('/posts', auth, postController.getPosts);
 router.post('/posts/create', auth, upload.single('image'), postController.createPost);
 router.delete('/posts/delete', auth, postController.deletePost);
-router.put('/posts/:postId/like', auth, postController.LikePost)
+router.put('/posts/:postId/like', auth, postController.likePost)
 router.put('/posts/:postId/save', auth, postController.savePost)
 
 // comments
