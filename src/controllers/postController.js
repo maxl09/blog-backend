@@ -6,17 +6,34 @@ const User = require('../models/User')
 
 exports.getPosts = async (req, res) => {
     try {
+        // const posts = await Post.find()
+        //     .populate('author', 'username profilePic')
+        //     .populate({
+        //         path: 'comments', select: 'text',
+        //         populate: { path: 'author', select: 'username profilePic' }
+        //     })
+        //     .sort({ createdAt: -1 })
+
         const posts = await Post.find()
-            .populate('author', 'username profilePic')
-            .populate({ path: 'comment', strictPopulate: false, populate: { path: 'author', select: 'username profilePic' } })
-            .populate({ path: 'createdAt' })
-            .sort({ createdAt: -1 })
+            .populate('author', 'username profilePic') // get post author info
+            .populate({
+                path: 'comments',             // populate the comments array in Post
+                select: 'text createdAt',     // only include comment text + timestamp
+                options: { sort: { createdAt: -1 } }, // sort comments newest-first
+                populate: {
+                    path: 'author',             // for each comment, populate author
+                    select: 'username profilePic'
+                }
+            })
+            .sort({ createdAt: -1 });       // sort posts newest-first
+
 
         res.json(posts);
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
 }
+
 
 exports.createPost = async (req, res) => {
     try {

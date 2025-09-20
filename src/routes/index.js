@@ -38,6 +38,7 @@ router.put('/posts/:postId/like', auth, postController.likePost)
 router.put('/posts/:postId/save', auth, postController.savePost)
 
 // comments
-router.put('/posts/:postId/create-comment', auth, commentController.createComment)
+router.put('/posts/:postId/comments/create', auth, commentController.createComment)
+// router.get('/posts/:postId/comments', auth, commentController.allComments)
 
 module.exports = router;
