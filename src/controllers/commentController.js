@@ -26,7 +26,7 @@ exports.createComment = async (req, res) => {
         const userId = req.user.id;
 
         const comment = await Comment.create({ text, author: userId, post: postId })
-        await Post.findByIdAndUpdate(postId, { $push: { comments: comment._id } }).sort({ createdAt: -1 })
+        await Post.findByIdAndUpdate(postId, { $push: { comments: comment._id } })
 
         const populatedComment = await Comment.findById(comment._id)
             .populate('author', 'username profilePic');

@@ -20,7 +20,7 @@ exports.getPosts = async (req, res) => {
                 strictPopulate: false,
                 path: 'comments',             // populate the comments array in Post
                 select: 'text createdAt',     // only include comment text + timestamp
-                options: { sort: { createdAt: -1 } }, // sort comments newest-first
+                options: { sort: { createdAt: 1 } }, // sort comments newest-first
                 populate: {
                     path: 'author',             // for each comment, populate author
                     select: 'username profilePic'
