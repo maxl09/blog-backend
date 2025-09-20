@@ -20,7 +20,7 @@ exports.deleteComment = async (req, res) => {
             return res.status(400).json({ error: 'Post not found' })
         }
         //Check permission
-        if (!req.user.isAdmin && post.author.toString() !== req.user.id) {
+        if (!req.user.isAdmin && comment.author.toString() !== req.user.id) {
             return res.status(403).json({ error: 'You do not have permission to delete this comment' });
 
         }
