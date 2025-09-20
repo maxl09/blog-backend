@@ -28,7 +28,9 @@ exports.createComment = async (req, res) => {
         const comment = await Comment.create({ text, author: userId, post: postId })
         await Post.findByIdAndUpdate(postId, { $push: { comments: comment._id } }).sort({ createdAt: -1 })
 
-        res.status(201).json(comment)
+        const populatedComment = await Comment.findById(comment._id)
+            .populate('author', 'username profilePic');
+        res.status(201).json(populatedComment)
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
