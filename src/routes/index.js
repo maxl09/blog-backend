@@ -39,6 +39,6 @@ router.put('/posts/:postId/save', auth, postController.savePost)
 
 // comments
 router.put('/posts/:postId/comments/create', auth, commentController.createComment)
-// router.get('/posts/:postId/comments', auth, commentController.allComments)
+router.delete('/posts/:postId/comments/delete', auth, commentController.deleteComment)
 
 module.exports = router;
