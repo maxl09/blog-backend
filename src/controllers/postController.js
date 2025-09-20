@@ -17,6 +17,7 @@ exports.getPosts = async (req, res) => {
         const posts = await Post.find()
             .populate('author', 'username profilePic') // get post author info
             .populate({
+                strictPopulate: false,
                 path: 'comments',             // populate the comments array in Post
                 select: 'text createdAt',     // only include comment text + timestamp
                 options: { sort: { createdAt: -1 } }, // sort comments newest-first
