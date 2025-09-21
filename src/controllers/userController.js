@@ -18,7 +18,11 @@ exports.profilePic = async (req, res) => {
 
         const imageUrl = req.file ? req.file.path : null; // Cloudinary URL
 
-        const user = await User.findByIdAndUpdate({ userId, profilePic: imageUrl })
+        if (!imageUrl) {
+            return res.status(400).json({ error: "No image uploaded" });
+        }
+
+        const user = await User.findByIdAndUpdate(userId, { profilePic: imageUrl, new: true })
         res.json(user)
     } catch (error) {
         res.status(500).json({ error: error.message })
