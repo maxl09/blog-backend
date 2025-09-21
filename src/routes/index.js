@@ -29,6 +29,7 @@ router.post('/login', authController.login);
 
 // user profile
 router.get('/user/:userId', auth, userController.getUser);
+router.post('/user/:userId/profilePic', auth, upload.single('image'), userController.profilePic);
 
 // posts
 router.get('/posts', auth, postController.getPosts);
