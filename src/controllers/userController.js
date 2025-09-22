@@ -28,3 +28,28 @@ exports.profilePic = async (req, res) => {
         res.status(500).json({ error: error.message })
     }
 }
+
+exports.createFollow = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        // const { postId } = req.body;
+        const currentUserId = req.user.id;
+
+        const user = await User.findById(userId)
+        const currentUser = await User.findById(currentUserId)
+        if (!user.followers.includes(userId)) {
+            user.followers.push(userId);
+            currentUser.following.push(currentUserId);
+        } else {
+            user.followers.pull(userId);
+            currentUser.following.pull(currentUserId);
+        }
+        await user.save();
+        await currentUser.save();
+
+        res.json(user);
+        res.json(currentUser)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
