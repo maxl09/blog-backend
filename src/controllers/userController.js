@@ -59,6 +59,8 @@ exports.createFollow = async (req, res) => {
         const { userId } = req.params;           // user to follow/unfollow
         const currentUserId = req.user.id;       // logged in user
 
+        console.log('req.user.id', req.user.id)
+
         if (userId === currentUserId) {
             return res.status(400).json({ error: "You cannot follow yourself" });
         }
