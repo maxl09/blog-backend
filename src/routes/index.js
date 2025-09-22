@@ -43,6 +43,6 @@ router.put('/posts/:postId/comments/create', auth, commentController.createComme
 router.delete('/posts/:postId/comments/delete', auth, commentController.deleteComment)
 
 // following & followers
-router.put('/user/:userId/follow', userController.createFollow)
+router.put('/user/:userId/follow', auth, userController.createFollow)
 
 module.exports = router;
