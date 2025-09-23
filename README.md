@@ -1,5 +1,4 @@
-## Frontend Repository: 
-Visit this [link](https://github.com/maxl09/blog-frontend)
+## Frontend Repository: Visit this [link](https://github.com/maxl09/blog-frontend)
 
 # Instagram Clone
 
