@@ -8,99 +8,74 @@ const path = require('path')
 require("dotenv").config();
 
 const app = express()
+
+try {
+    // MongoDB connection
+    const PORT = process.env.PORT || 5002;
+    const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/blog-page";
+
+    mongoose.connect(MONGO_URI)
+        .then(() => console.log('MongoDB connected to', mongoose.connection.name))
+        .catch(err => console.error("MongoDB connection error:", err));
+
+    // API middlewares
+    app.use(express.json());
+    app.use(cors({
+        origin: [
+            "http://localhost:5173",
+            "https://blog-frontend-mzdu.onrender.com"
+        ],
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: true
+    }));
+
+
+    // Routes
+    app.use('/', require('./src/routes'));
+
+    // Static frontend
+    app.use(express.static(path.join(__dirname, 'dist')));
+    app.get(/.*/, (req, res) => {
+        res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    });
+
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+} catch (err) {
+    console.error("Server startup error:", err);
+}
+
+// app.use(express.json());
+// app.use(cors({
+//     origin: [
+//         "http://localhost:5173",          // dev frontend
+//         "https://blog-frontend-mzdu.onrender.com" // deployed frontend
+//     ],
+//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//     credentials: true
+// }));
+
+// // serve uploaded images
+// app.use('/uploads', express.static('uploads'));
+
+// app.use('/', require('./src/routes'));
+
 // app.use(express.static(path.join(__dirname, 'dist')))
-// app.use(express.static("/Users/max/Documents/Personal Projects/blog-backend/dist/index.html"))
+// // app.use(express.static("/Users/max/Documents/Personal Projects/blog-backend/dist/index.html"))
 
 // app.get("*", (req, res) => {
 //     res.sendFile(path.join(__dirname, 'dist', 'index.html'))
 // })
 
-app.use(express.json());
-app.use(cors({
-    origin: [
-        "http://localhost:5173",          // dev frontend
-        "https://blog-frontend-mzdu.onrender.com" // deployed frontend
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true
-}));
-
-const PORT = process.env.PORT || 5002;
-const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/blog-page";
-// const MONGO_URI = "mongodb://127.0.0.1:27017/blog-page";
+// const PORT = process.env.PORT || 5002;
+// const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/blog-page";
+// // const MONGO_URI = "mongodb://127.0.0.1:27017/blog-page";
 
 
+// // console.log(__dirname, 'dist', 'index')
+// mongoose.connect(MONGO_URI)
+//     .then(() => console.log('MongoDB connected to', mongoose.connection.name))
+//     .catch(err => console.error("MongoDB connection error:", err));
 
-// console.log(__dirname, 'dist', 'index')
-mongoose.connect(MONGO_URI)
-    .then(() => console.log('MongoDB connected to', mongoose.connection.name))
-    .catch(err => console.error("MongoDB connection error:", err));
-
-// const UserSchema = new mongoose.Schema({
-//     name: { type: String, required: true },
-//     username: { type: String, required: true, unique: true },
-//     password: { type: String, required: true }
-// });
-
-// const User = mongoose.model("User", UserSchema);
-
-// Sign up
-// app.post('/signup', async (req, res) => {
-//     try {
-//         const { name, username, password } = req.body;
-
-//         const hashedPassword = await bcrypt.hash(password, 10);
-//         const newUser = new User({ name, username, password: hashedPassword });
-//         await newUser.save();
-
-//         res.json({ message: 'User created successfully' })
-//     } catch (err) {
-//         res.status(400).json({ error: "User already exists" })
-//     }
-// })
-
-// // Login
-// app.post('/login', async (req, res) => {
-//     const { username, password } = req.body;
-//     const user = await User.findOne({ username });
-
-//     if (!user) {
-//         return res.status(400).json({ error: 'User not found' })
-//     }
-
-//     const isMatch = await bcrypt.compare(password, user.password);
-//     if (!isMatch) {
-//         return res.status(400).json({ error: 'Invalid credentials' })
-//     }
-
-//     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-//     res.json({ token })
-// })
-
-// app.get('/', (req, res) => {
-//     console.log("Incoming headers:", req.headers); // debug
-
-//     let token = req.headers['authorization'];
-//     if (!token) return res.status(401).json({ error: "Access denied" });
-
-//     // Remove "Bearer " if present
-//     if (token.startsWith("Bearer ")) {
-//         token = token.slice(7).trim();
-//     }
-
-//     try {
-//         const verified = jwt.verify(token, process.env.JWT_SECRET);
-//         res.json({ message: "Welcome!", userId: verified.id });
-//     } catch (err) {
-//         console.log("JWT verification error:", err);
-//         res.status(400).json({ error: 'Invalid token' });
-//     }
-// });
-
-// serve uploaded images
-app.use('/uploads', express.static('uploads'));
-
-app.use('/', require('./src/routes'));
-
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
