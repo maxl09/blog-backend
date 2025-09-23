@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js",
-    "build:frontend-deploy": "cd ../blog-frontend/frontend && npm run build && mkdir -p ../blog-backend/dist && rsync -a --delete dist/ ../blog-backend/dist/ && cd ../blog-backend && git add dist && git commit -m 'Update frontend build' && git push origin main"
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
