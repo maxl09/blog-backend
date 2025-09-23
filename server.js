@@ -8,7 +8,7 @@ const path = require('path')
 require("dotenv").config();
 
 const app = express()
-app.use(express.static(path.join(__dirname, 'dist')))
+// app.use(express.static(path.join(__dirname, 'dist')))
 // app.use(express.static("/Users/max/Documents/Personal Projects/blog-backend/dist/index.html"))
 
 // app.get("*", (req, res) => {
@@ -32,7 +32,7 @@ const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/blog-page"
 
 
 
-console.log(__dirname, 'dist', 'index')
+// console.log(__dirname, 'dist', 'index')
 mongoose.connect(MONGO_URI)
     .then(() => console.log('MongoDB connected to', mongoose.connection.name))
     .catch(err => console.error("MongoDB connection error:", err));
