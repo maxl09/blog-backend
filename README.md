@@ -1,6 +1,3 @@
-## Frontend Repository: 
-Visit this [link](https://github.com/maxl09/blog-frontend)
-
 # Instagram Clone
 
 A full-stack social media application inspired by Instagram, built with React and Express.js, using MongoDB for a live database. The platform allows users to share photos, follow others, and interact through likes and comments. 
