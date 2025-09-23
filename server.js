@@ -4,13 +4,21 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
+const path = require('path')
 require("dotenv").config();
 
 const app = express()
+app.use(express.static(path.join(__dirname, 'dist')))
+// app.use(express.static("/Users/max/Documents/Personal Projects/blog-backend/dist/index.html"))
+
+// app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, 'dist', 'index.html'))
+// })
+
 app.use(express.json());
 app.use(cors({
     origin: [
-        "http://localhost:5173",               // dev frontend
+        "http://localhost:5173",          // dev frontend
         "https://blog-frontend-lvlz.onrender.com" // deployed frontend
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -22,6 +30,9 @@ const PORT = process.env.PORT || 5002;
 const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/blog-page";
 // const MONGO_URI = "mongodb://127.0.0.1:27017/blog-page";
 
+
+
+console.log(__dirname, 'dist', 'index')
 mongoose.connect(MONGO_URI)
     .then(() => console.log('MongoDB connected to', mongoose.connection.name))
     .catch(err => console.error("MongoDB connection error:", err));
