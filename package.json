@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "build:frontend": "cd ../blog-frontend/frontend && npm run build && rsync -a --delete dist/ ../blog-backend/dist/"
   },
   "keywords": [],
   "author": "",
