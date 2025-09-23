@@ -29,6 +29,19 @@ exports.profilePic = async (req, res) => {
     }
 }
 
+exports.editProfile = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const { username, name, bio } = req.body;
+
+        const user = await User.findByIdAndUpdate(userId, { username, name, bio })
+        res.json(user)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
 // exports.createFollow = async (req, res) => {
 //     try {
 //         const { userId } = req.params;
