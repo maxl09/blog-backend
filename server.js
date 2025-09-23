@@ -23,7 +23,7 @@ try {
     app.use(cors({
         origin: [
             "http://localhost:5173",
-            "https://blog-frontend-mzdu.onrender.com"
+            "https://blog-frontend-4cy2.onrender.com"
         ],
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization"],
