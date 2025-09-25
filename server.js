@@ -32,12 +32,12 @@ try {
 
 
     // Routes
-    app.use('/api', require('./src/routes'));
+    app.use('/', require('./src/routes'));
 
     // Static frontend
     const __dirname = path.resolve();
     app.use(express.static(path.join(__dirname, 'dist')));
-    app.get(/^\/(?!api).*/, (req, res) => {
+    app.get(/^\/(?!).*/, (req, res) => {
         res.sendFile(path.join(__dirname, 'dist', 'index.html'));
     });
 
