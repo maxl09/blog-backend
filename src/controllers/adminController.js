@@ -10,3 +10,13 @@ exports.users = async (req, res) => {
         res.status(500).json({ error: error.message })
     }
 }
+
+exports.deleteUser = async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const user = await User.findByIdAndDelete(userId);
+        res.json(user)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}

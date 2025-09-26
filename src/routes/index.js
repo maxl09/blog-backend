@@ -22,6 +22,7 @@ const router = express.Router();
 
 // admin
 router.get('/users', auth, adminController.users)
+router.delete('/users/:userId/delete', auth, admin, adminController.deleteUser);
 
 // auth
 router.post('/signup', authController.signup);
